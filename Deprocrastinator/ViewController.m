@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate >
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, UIScrollViewDelegate >
 
 @property NSMutableArray *titles;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -28,38 +28,18 @@
 //    UIColor *color2 =[UIColor greenColor];
     
     if (swipedCell.textLabel.textColor == [UIColor blackColor]) {
-        swipedCell.textLabel.textColor= [UIColor blackColor];
+        swipedCell.textLabel.textColor= [UIColor greenColor];
     }
-    
-//    if(color1 == color2){
-    
-        
-//    }
-    
-//    
-//    if([greenColor.backgroundColor isEqual:swipedCell.textLabel.backgroundColor])
-//    {
-//        
-//        swipedCell.textLabel.backgroundColor = [UIColor whiteColor];
-// 
-//    }
-//    if(swipedCell.textLabel.backgroundColor == [UIColor greenColor])
-//    {
-//        
-//        swipedCell.textLabel.backgroundColor = [UIColor yellowColor];
-//        
-//    }
-//
-//    if(swipedCell.textLabel.backgroundColor == [UIColor yellowColor])
-//    {
-//        
-//        swipedCell.textLabel.backgroundColor = [UIColor redColor];
-//        
-//    }
-//
-//    
-    
-    
+    if (swipedCell.textLabel.textColor == [UIColor yellowColor]) {
+        swipedCell.textLabel.textColor= [UIColor redColor];
+    }
+    if (swipedCell.textLabel.textColor == [UIColor greenColor]) {
+        swipedCell.textLabel.textColor= [UIColor yellowColor];
+    }
+
+
+
+
 }
 
 
@@ -80,18 +60,38 @@
     thecell.textColor = [UIColor greenColor];
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
-    
-    
+  
     
 }
 
 
-
-
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self.titles removeObjectAtIndex:indexPath.row];
-    [self.tableView reloadData];
+    
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"confirm deletion!" message:@"Are you sure you want to delete this cell?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    
+    
+    UIAlertAction *cancel =[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    
+    UIAlertAction *delete = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [self.titles removeObjectAtIndex:indexPath.row];
+        [self.tableView reloadData];
+    }];
+    
+    
+    [alert addAction:cancel];
+    [alert addAction:delete];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+
+    
+    
+    
+    
+    
 }
 - (IBAction)edit:(UIBarButtonItem *)sender
 {
