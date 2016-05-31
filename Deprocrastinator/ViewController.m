@@ -8,20 +8,90 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate >
+
 @property NSMutableArray *titles;
-@property NSMutableArray *descriptions;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
 @implementation ViewController
+- (IBAction)gesture:(UISwipeGestureRecognizer *)sender {
+    CGPoint location = [sender locationInView:_tableView];
+    NSIndexPath *swipedIndexPath = [self.tableView indexPathForRowAtPoint:location];
+    UITableViewCell *swipedCell  = [self.tableView cellForRowAtIndexPath:swipedIndexPath];
+    //swipedCell.textLabel.backgroundColor
+    
+//    
+//    UIColor *color1 = swipedCell.backgroundColor;
+//    
+//    UIColor *color2 =[UIColor greenColor];
+    
+    if (swipedCell.textLabel.textColor == [UIColor blackColor]) {
+        swipedCell.textLabel.textColor= [UIColor blackColor];
+    }
+    
+//    if(color1 == color2){
+    
+        
+//    }
+    
+//    
+//    if([greenColor.backgroundColor isEqual:swipedCell.textLabel.backgroundColor])
+//    {
+//        
+//        swipedCell.textLabel.backgroundColor = [UIColor whiteColor];
+// 
+//    }
+//    if(swipedCell.textLabel.backgroundColor == [UIColor greenColor])
+//    {
+//        
+//        swipedCell.textLabel.backgroundColor = [UIColor yellowColor];
+//        
+//    }
+//
+//    if(swipedCell.textLabel.backgroundColor == [UIColor yellowColor])
+//    {
+//        
+//        swipedCell.textLabel.backgroundColor = [UIColor redColor];
+//        
+//    }
+//
+//    
+    
+    
+}
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.titles = [NSMutableArray new];
+    self.titles = [NSArray arrayWithObjects:@"get up", @"make coffee", @"whatever", nil].mutableCopy;
 
     
+}
+
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    UITableViewCell *thecell = [tableView cellForRowAtIndexPath:indexPath];
+    thecell.textColor = [UIColor greenColor];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    
+    
+    
+}
+
+
+
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self.titles removeObjectAtIndex:indexPath.row];
+    [self.tableView reloadData];
 }
 - (IBAction)edit:(UIBarButtonItem *)sender
 {
@@ -50,9 +120,6 @@
     [self.titles removeObject:title];
     [self.titles insertObject:title atIndex:destinationIndexPath.row];
     
-    NSString *description =[self.descriptions objectAtIndex:sourceIndexPath.row];
-    [self.descriptions removeObject:description];
-    [self.descriptions insertObject:description atIndex:destinationIndexPath.row];
     
 }
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,7 +161,7 @@
     
     UITableViewCell *cell =[tableView dequeueReusableCellWithIdentifier:@"CellID"];
     cell.textLabel.text = [self.titles objectAtIndex:indexPath.row];
-    cell.detailTextLabel.text = [self.descriptions objectAtIndex:indexPath.row];
+    
     return  cell;
 }
 
@@ -105,6 +172,7 @@
     return self.titles.count;
     
 }
+
 
 
 @end
